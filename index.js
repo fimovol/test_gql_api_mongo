@@ -24,14 +24,14 @@ app.get('/', (request, response) => {
     })
 })
 app.get('/api/notes/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const note = notes.find(note => note.id === id)
-    
-    if (note) {
-        return response.json(note)
-    } else {
-        response.status(404).end()
-    }
+    const { id } = request.params
+    Note.findById(id).then(note =>{
+        if (note) {
+            return response.json(note)
+        } else {
+            response.status(404).end()
+        }
+    })
 })
 app.post('/api/notes', (request, response) => {
     const note = request.body
@@ -40,14 +40,15 @@ app.post('/api/notes', (request, response) => {
             error: 'required "content" field is missing'
         })
     }
-    const newNote = {
-        id: generateId(),
+    const newNote = new Note({
         content: note.content,
         date: new Date(),
-        import: note.important || false
-    }
-    notes = notes.concat(newNote)
-    response.json(note)
+        important: note.important || false
+    })
+
+    newNote.save().then(savedNote => {
+        response.json(savedNote)
+    })
 })
 
 const PORT = process.env.PORT
