@@ -9,14 +9,6 @@ const Note = require('./models/Note')
 app.use(cors())
 app.use(express.json())
 
-let notes = []
-
-const generateId = () => {
-    const notesIds = notes.map(n => n.id)
-    const maxId = notesIds.length ? Math.max(...notesIds) : 0
-    const newId = maxId + 1
-    return newId
-}
 
 app.get('/', (request, response) => {
     Note.find({}).then(notes => {

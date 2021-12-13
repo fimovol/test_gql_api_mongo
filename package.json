@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dbrun": "docker-compose -f docker-compose.dev.yml up --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
