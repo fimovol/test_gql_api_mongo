@@ -1,3 +1,4 @@
+require('dotenv').config()
 var { buildSchema } = require('graphql');
 var express = require('express');
 var { graphqlHTTP } = require('express-graphql');
@@ -41,11 +42,11 @@ var root = {
 
 
     getNota: async ()=>{
-        const {data:datos} = await axios.get('http://localhost:3002')
+        const {data:datos} = await axios.get(`http://localhost:${process.env.PORT}`)
         return datos
     },
     getNotaconid: async ({id})=>{
-        const {data:datos} = await axios.get(`http://localhost:3002/api/notes/${id}`)
+        const {data:datos} = await axios.get(`http://localhost:${process.env.PORT}/api/notes/${id}`)
         return datos
     },
     updateNota: async ({content,important})=>{
@@ -53,7 +54,7 @@ var root = {
             content: content,
             important: important
         });
-        const {data:datos} = await axios.post('http://localhost:3002/api/notes', json, {
+        const {data:datos} = await axios.post(`http://localhost:${process.env.PORT}/api/notes`, json, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -69,5 +70,5 @@ app.use('/graphql', graphqlHTTP({
     rootValue: root,
     graphiql: true,
 }));
-app.listen(4001);
-console.log('Running a GraphQL API server at http://localhost:4001/graphql');
+app.listen(process.env.PORT_GQL);
+console.log(`Running a GraphQL API server at http://localhost:${process.env.PORT_GQL}/graphql`);
